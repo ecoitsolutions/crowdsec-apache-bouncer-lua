@@ -1,0 +1,19 @@
+# Configuration for the CrowdSec Apache Lua Bouncer
+
+# URL of the CrowdSec Local API (LAPI)
+# Ensure this is reachable from your Apache server.
+crowdsec_lapi_url: "http://127.0.0.1:8080/"
+
+# API Key for the bouncer
+# This will be automatically generated and filled in by the install.sh script.
+# Do not change PLACEHOLDER_API_KEY manually if using the script.
+api_key: "PLACEHOLDER_API_KEY"
+
+# Cache Time-To-Live (TTL) in seconds
+# How long to cache decisions (ban/allow) for an IP before re-checking the LAPI.
+# Reduces load on LAPI. Default: 60 seconds.
+cache_ttl: 60
+
+# Note: Other options like custom User-Agent, timeout values, etc.,
+# are currently hardcoded in the crowdsec_bouncer.lua script but could be
+# made configurable here in future versions if needed.
