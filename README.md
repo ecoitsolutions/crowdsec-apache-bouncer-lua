@@ -111,7 +111,7 @@ After running the installation script, you **must** manually edit your Apache co
 
 ---
 
-### <ins>File Descriptions</ins>
+### File Descriptions
 
 #### 📄 Configuration File
 
