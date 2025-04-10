@@ -44,7 +44,6 @@ While the installation script attempts to install most dependencies, ensure the 
     * `install.sh`
     * `crowdsec_bouncer.lua`
     * `apache-bouncer.yaml` (this is the template)
-    
 2.  **Make the script executable:**
     ```bash
     chmod +x install.sh
@@ -71,9 +70,7 @@ While the installation script attempts to install most dependencies, ensure the 
 
 ## 🔧 Apache Configuration Activation
 
-After running the installation script, you **must** manually edit your Apache configuration to activate the bouncer. 
-Add the following directives inside the relevant `<VirtualHost>` section(s) of your Apache configuration file 
-(e.g., `/etc/httpd/conf.d/your-site.conf` on RHEL/CentOS or `/etc/apache2/sites-available/your-site.conf` on Debian/Ubuntu):
+After running the installation script, you **must** manually edit your Apache configuration to activate the bouncer. Add the following directives inside the relevant `<VirtualHost>` section(s) of your Apache configuration file (e.g., `/etc/httpd/conf.d/your-site.conf` on RHEL/CentOS or `/etc/apache2/sites-available/your-site.conf` on Debian/Ubuntu):
 
 ```apache
 <VirtualHost *:80>
@@ -92,9 +89,7 @@ Add the following directives inside the relevant `<VirtualHost>` section(s) of y
 </VirtualHost>
 ### <ins>Understanding `LuaHookAccessChecker`</ins>
 
-> *Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`.
-It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic.
-This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
+> *Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
 
 ---
 
@@ -126,14 +121,10 @@ This hook runs early in the request cycle, before content generation, allowing m
 ####  Lua Script
 
 * **Location:** `/usr/share/crowdsec-apache-bouncer/crowdsec_bouncer.lua`
-* **Functionality:** Contains the core logic executed by `mod_lua`.
-It reads the configuration, implements the `check_access` function hooked by Apache, queries the CrowdSec LAPI,
-manages the cache, logs actions, and returns the appropriate HTTP status code (e.g., `403` for blocked IPs or allows Apache to continue processing).
+* **Functionality:** Contains the core logic executed by `mod_lua`. It reads the configuration, implements the `check_access` function hooked by Apache, queries the CrowdSec LAPI, manages the cache, logs actions, and returns the appropriate HTTP status code (e.g., `403` for blocked IPs or allows Apache to continue processing).
 
 #### 🪵 Log File
 
 * **Location:** `/var/log/crowdsec-apache-bouncer.log`
-* **Contents:** Records the bouncer's activity, including IPs checked against LAPI, cache hits, blocked requests, allowed requests (can be verbose),
-and any errors encountered during operation (e.g., LAPI connection issues, configuration errors).
-* **Permissions:** The installation script attempts to set ownership to the Apache user (`www-data` or `apache`) and permissions (e.g., `640`)
-to allow Apache to write to this file. **Verify these permissions if logging doesn't work.**
+* **Contents:** Records the bouncer's activity, including IPs checked against LAPI, cache hits, blocked requests, allowed requests (can be verbose), and any errors encountered during operation (e.g., LAPI connection issues, configuration errors).
+* **Permissions:** The installation script attempts to set ownership to the Apache user (`www-data` or `apache`) and permissions (e.g., `640`) to allow Apache to write to this file. **Verify these permissions if logging doesn't work.**
