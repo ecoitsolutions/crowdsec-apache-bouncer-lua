@@ -85,6 +85,7 @@ While the installation script attempts to install most dependencies, ensure the 
 After running the installation script, you **must** manually edit your Apache configuration to activate the bouncer. Add the following directives inside the relevant `<VirtualHost>` section(s) of your Apache configuration file (e.g., `/etc/httpd/conf.d/your-site.conf` on RHEL/CentOS or `/etc/apache2/sites-available/your-site.conf` on Debian/Ubuntu):
 
 
+
 ```apache
 <VirtualHost *:80>
     ServerName yourdomain.com
@@ -100,6 +101,13 @@ After running the installation script, you **must** manually edit your Apache co
 
     # Other standard Apache directives...
 </VirtualHost>
+```
+
+### Understanding `LuaHookAccessChecker`
+
+*Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. 
+It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. 
+This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
 ```
 
 ### Understanding `LuaHookAccessChecker`
@@ -125,9 +133,25 @@ This hook runs early in the request cycle, before content generation, allowing m
     * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
 
 ✅ The bouncer should now be active for the configured virtual host(s).
+### Activating the Bouncer in Apache
+
+⚠️ Important: After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
+
+1.  **Test your Apache configuration for syntax errors:**
+
+    * Debian/Ubuntu: `sudo apache2ctl configtest`
+    * RHEL/CentOS/Fedora: `sudo apachectl configtest`
+
+2.  **If the configuration test is successful, restart Apache to apply the changes:**
+
+    * Debian/Ubuntu: `sudo systemctl restart apache2`
+    * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
+
+✅ The bouncer should now be active for the configured virtual host(s).
 
 ---
 
+### File Descriptions
 ### File Descriptions
 
 #### 📄 Configuration File
@@ -139,8 +163,13 @@ This hook runs early in the request cycle, before content generation, allowing m
     * `cache_ttl`: Cache duration (in seconds) for decisions (default: `60`). How long an IP's block/allow status is remembered before querying the LAPI again.
 
 #### Lua Script
+#### Lua Script
 
 * **Location:** `/usr/share/crowdsec-apache-bouncer/crowdsec_bouncer.lua`
+* **Functionality:** Contains the core logic executed by `mod_lua`. 
+It reads the configuration, implements the `check_access` function hooked by Apache, 
+queries the CrowdSec LAPI, manages the cache, logs actions, 
+and returns the appropriate HTTP status code (e.g., `403` for blocked IPs or allows Apache to continue processing).
 * **Functionality:** Contains the core logic executed by `mod_lua`. 
 It reads the configuration, implements the `check_access` function hooked by Apache, 
 queries the CrowdSec LAPI, manages the cache, logs actions, 
