@@ -72,6 +72,7 @@ While the installation script attempts to install most dependencies, ensure the 
 
 After running the installation script, you **must** manually edit your Apache configuration to activate the bouncer. Add the following directives inside the relevant `<VirtualHost>` section(s) of your Apache configuration file (e.g., `/etc/httpd/conf.d/your-site.conf` on RHEL/CentOS or `/etc/apache2/sites-available/your-site.conf` on Debian/Ubuntu):
 
+
 ```apache
 <VirtualHost *:80>
     ServerName yourdomain.com
@@ -87,9 +88,13 @@ After running the installation script, you **must** manually edit your Apache co
 
     # Other standard Apache directives...
 </VirtualHost>
+```
+
 ### Understanding `LuaHookAccessChecker`
 
-*Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
+*Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. 
+It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. 
+This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
 
 ---
 
@@ -99,13 +104,13 @@ After running the installation script, you **must** manually edit your Apache co
 
 1.  **Test your Apache configuration for syntax errors:**
 
-    *Debian/Ubuntu: `sudo apache2ctl configtest`*
-    *RHEL/CentOS/Fedora: `sudo apachectl configtest`*
+    * Debian/Ubuntu: `sudo apache2ctl configtest`
+    * RHEL/CentOS/Fedora: `sudo apachectl configtest`
 
 2.  **If the configuration test is successful, restart Apache to apply the changes:**
 
-    *Debian/Ubuntu: `sudo systemctl restart apache2`*
-    *RHEL/CentOS/Fedora: `sudo systemctl restart httpd`*
+    * Debian/Ubuntu: `sudo systemctl restart apache2`
+    * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
 
 ✅ The bouncer should now be active for the configured virtual host(s).
 
@@ -124,10 +129,15 @@ After running the installation script, you **must** manually edit your Apache co
 #### Lua Script
 
 * **Location:** `/usr/share/crowdsec-apache-bouncer/crowdsec_bouncer.lua`
-* **Functionality:** Contains the core logic executed by `mod_lua`. It reads the configuration, implements the `check_access` function hooked by Apache, queries the CrowdSec LAPI, manages the cache, logs actions, and returns the appropriate HTTP status code (e.g., `403` for blocked IPs or allows Apache to continue processing).
+* **Functionality:** Contains the core logic executed by `mod_lua`. 
+It reads the configuration, implements the `check_access` function hooked by Apache, 
+queries the CrowdSec LAPI, manages the cache, logs actions, 
+and returns the appropriate HTTP status code (e.g., `403` for blocked IPs or allows Apache to continue processing).
 
 #### 🪵 Log File
 
 * **Location:** `/var/log/crowdsec-apache-bouncer.log`
-* **Contents:** Records the bouncer's activity, including IPs checked against LAPI, cache hits, blocked requests, allowed requests (can be verbose), and any errors encountered during operation (e.g., LAPI connection issues, configuration errors).
-* **Permissions:** The installation script attempts to set ownership to the Apache user (`www-data` or `apache`) and permissions (e.g., `640`) to allow Apache to write to this file. **Verify these permissions if logging doesn't work.**
+* **Contents:** Records the bouncer's activity, including IPs checked against LAPI, cache hits, blocked requests, 
+allowed requests (can be verbose), and any errors encountered during operation (e.g., LAPI connection issues, configuration errors).
+* **Permissions:** The installation script attempts to set ownership to the Apache user (`www-data` or `apache`) 
+and permissions (e.g., `640`) to allow Apache to write to this file. **Verify these permissions if logging doesn't work.**
