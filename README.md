@@ -98,11 +98,15 @@ After running the installation script, you **must** manually edit your Apache co
 ⚠️ Important: After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
 
 1.  **Test your Apache configuration for syntax errors:**
+
     * Debian/Ubuntu: `sudo apache2ctl configtest`
     * RHEL/CentOS/Fedora: `sudo apachectl configtest`
+
 2.  **If the configuration test is successful, restart Apache to apply the changes:**
+
     * Debian/Ubuntu: `sudo systemctl restart apache2`
     * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
+
 ✅ The bouncer should now be active for the configured virtual host(s).
 
 ---
