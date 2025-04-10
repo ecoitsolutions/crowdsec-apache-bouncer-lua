@@ -44,7 +44,7 @@ While the installation script attempts to install most dependencies, ensure the 
     * `install.sh`
     * `crowdsec_bouncer.lua`
     * `apache-bouncer.yaml` (this is the template)
-    * `LICENSE` (Your chosen license file, e.g., AGPL-3.0)
+    
 2.  **Make the script executable:**
     ```bash
     chmod +x install.sh
