@@ -89,22 +89,21 @@ After running the installation script, you **must** manually edit your Apache co
 </VirtualHost>
 ### <ins>Understanding `LuaHookAccessChecker`</ins>
 
-> *Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
+*Note: The `check_access` function is called implicitly by `mod_lua` during the access checker phase specified by `LuaHookAccessChecker`. It receives the Apache request object (`r`) automatically, which contains client IP and other request details necessary for the bouncer's logic. This hook runs early in the request cycle, before content generation, allowing malicious IPs to be blocked efficiently.*
 
 ---
 
 ### <ins>Activating the Bouncer in Apache</ins>
 
-> **⚠️ Important:** After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
->
-> 1.  **Test your Apache configuration for syntax errors:**
->     * Debian/Ubuntu: `sudo apache2ctl configtest`
->     * RHEL/CentOS/Fedora: `sudo apachectl configtest`
-> 2.  **If the configuration test is successful, restart Apache to apply the changes:**
->     * Debian/Ubuntu: `sudo systemctl restart apache2`
->     * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
->
-> ✅ The bouncer should now be active for the configured virtual host(s).
+**⚠️ Important:** After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
+
+1.  **Test your Apache configuration for syntax errors:**
+    * Debian/Ubuntu: `sudo apache2ctl configtest`
+    * RHEL/CentOS/Fedora: `sudo apachectl configtest`
+2.  **If the configuration test is successful, restart Apache to apply the changes:**
+    * Debian/Ubuntu: `sudo systemctl restart apache2`
+    * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
+✅ The bouncer should now be active for the configured virtual host(s).
 
 ---
 
