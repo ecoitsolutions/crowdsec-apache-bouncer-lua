@@ -133,29 +133,12 @@ This hook runs early in the request cycle, before content generation, allowing m
     * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
 
 ✅ The bouncer should now be active for the configured virtual host(s).
-### Activating the Bouncer in Apache
-
-⚠️ Important: After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
-
-1.  **Test your Apache configuration for syntax errors:**
-
-    * Debian/Ubuntu: `sudo apache2ctl configtest`
-    * RHEL/CentOS/Fedora: `sudo apachectl configtest`
-
-2.  **If the configuration test is successful, restart Apache to apply the changes:**
-
-    * Debian/Ubuntu: `sudo systemctl restart apache2`
-    * RHEL/CentOS/Fedora: `sudo systemctl restart httpd`
-
-✅ The bouncer should now be active for the configured virtual host(s).
 
 ---
 
 ### File Descriptions
-### File Descriptions
 
 #### 📄 Configuration File
-
 * **Location:** `/etc/crowdsec/bouncers/apache-bouncer.yaml`
 * **Contents:**
     * `crowdsec_lapi_url`: URL of the CrowdSec Local API (default: `http://127.0.0.1:8080/`). **Must be reachable** by the Apache server process.
@@ -163,8 +146,6 @@ This hook runs early in the request cycle, before content generation, allowing m
     * `cache_ttl`: Cache duration (in seconds) for decisions (default: `60`). How long an IP's block/allow status is remembered before querying the LAPI again.
 
 #### Lua Script
-#### Lua Script
-
 * **Location:** `/usr/share/crowdsec-apache-bouncer/crowdsec_bouncer.lua`
 * **Functionality:** Contains the core logic executed by `mod_lua`. 
 It reads the configuration, implements the `check_access` function hooked by Apache, 
