@@ -93,7 +93,7 @@ After running the installation script, you **must** manually edit your Apache co
 
 ---
 
-### Activating the Bouncer in Apache<
+### Activating the Bouncer in Apache
 
 ⚠️ Important: After adding the `LuaLoadFile` and `LuaHookAccessChecker` lines to your Apache configuration:
 
