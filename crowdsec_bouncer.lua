@@ -1,6 +1,6 @@
 --[[
   crowdsec_bouncer.lua
-  Copyright (C) 2025 <Your Name or GitHub Username>
+  Copyright (C) 2025 <lucianlazar1983>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as published by
